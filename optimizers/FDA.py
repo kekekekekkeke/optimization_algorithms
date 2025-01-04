@@ -20,6 +20,7 @@ import time
 
 def FDA(objf, lb, ub, dim, SearchAgents_no, Max_iter):
     s = solution()
+    s.optimizer="FDA"
     s.objfname = objf.__name__
     s.lb = lb
     s.ub = ub
@@ -72,9 +73,9 @@ def FDA(objf, lb, ub, dim, SearchAgents_no, Max_iter):
             random_fitness = objf(random_flow)
 
             if random_fitness < Flow_fitness[i]:
-                Flow_newX = Flow_X[i] + np.random.normal(0, 1) * (random_flow - Flow_X[i])
+                Flow_newX = np.clip(Flow_X[i] + np.random.normal(0, 1) * (random_flow - Flow_X[i]), lb, ub)
             else:
-                Flow_newX = Flow_X[i] + 2 * np.random.normal(0, 1) * (Best_X - Flow_X[i])
+                Flow_newX = np.clip(Flow_X[i] + 2 * np.random.normal(0, 1) * (Best_X - Flow_X[i]), lb, ub)
 
             # Yeni fitness değerini hesapla ve güncelle
             new_fitness = objf(Flow_newX)
@@ -103,12 +104,20 @@ def FDA(objf, lb, ub, dim, SearchAgents_no, Max_iter):
 
 def generate_neighbors(Flow_X, W, Best_X, dim):
     rand = np.random.uniform(0, 1, dim)
-    Delta = (rand * Best_X - Flow_X) * W
+    Delta = (rand * (Best_X - Flow_X) + 1e-6) * W
     return Flow_X + np.random.normal(0, 1, (5, dim)) * Delta
 
 def calculate_slope(Flow_X, Neighbor_X, Flow_fitness, Neighbor_fitness):
-    return (Flow_fitness - Neighbor_fitness) / np.linalg.norm(Flow_X - Neighbor_X)
+    norm = np.linalg.norm(Flow_X - Neighbor_X)
+    if norm == 0:
+        return 0  # Eğim sıfır
+    return (Flow_fitness - Neighbor_fitness) / norm
 
 def update_position(Flow_X, Neighbor_X, V, lb, ub):
-    Flow_newX = Flow_X + V * (Flow_X - Neighbor_X) / np.linalg.norm(Flow_X - Neighbor_X)
+    norm = np.linalg.norm(Flow_X - Neighbor_X)
+    if norm == 0:
+        Flow_newX = Flow_X  # Hiçbir güncelleme yapma
+    else:
+        Flow_newX = Flow_X + V * (Flow_X - Neighbor_X) / norm
     return np.clip(Flow_newX, lb, ub)
+
