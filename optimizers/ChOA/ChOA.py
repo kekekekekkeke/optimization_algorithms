@@ -15,7 +15,7 @@ import math
 import time
 import random
 
-def Chimp(objf, lb, ub, dim, SearchAgents_no, Max_iter):
+def ChOA(objf, lb, ub, dim, SearchAgents_no, Max_iter):
     # Initialize positions and scores
     Attacker_pos = numpy.zeros(dim)
     Attacker_score = float('inf')
