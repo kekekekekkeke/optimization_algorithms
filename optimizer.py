@@ -22,7 +22,13 @@ import optimizers.DE as de
 import optimizers.AAA as aaa
 import optimizers.APO as apo
 import optimizers.MGO.MGO as mgo
+<<<<<<< HEAD
 import optimizers.EO as eo
+=======
+import optimizers.ChOA.ChOA as choa
+import optimizers.COA as coa
+
+>>>>>>> 115190ca3077776fdb5c8d3a5c3247a25bbc42f6
 
 import benchmarks
 import csv
@@ -76,8 +82,15 @@ def selector(algo, func_details, popSize, Iter):
         x = apo.APO(getattr(benchmarks, function_name), lb, ub, dim, popSize, Iter)
     elif algo == "MGO":
         x = mgo.MGO(getattr(benchmarks, function_name), lb, ub, dim, popSize, Iter)
+<<<<<<< HEAD
     elif algo == "EO":
         x = eo.EO(getattr(benchmarks, function_name), lb, ub, dim, popSize, Iter)
+=======
+    elif algo == "ChOA":
+        x = choa.ChOA(getattr(benchmarks, function_name), lb, ub, dim, popSize, Iter)
+    elif algo == "COA":
+        x = coa.COA(getattr(benchmarks, function_name), lb, ub, dim, popSize, Iter)
+>>>>>>> 115190ca3077776fdb5c8d3a5c3247a25bbc42f6
     else:
         return None # burdaki typo'yu düzelttim. null yazıyordu Python için "None" olması gerekiyor.
     return x

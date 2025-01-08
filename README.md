@@ -136,6 +136,13 @@ Bu depo, Optimizasyona Giriş dersi kapsamında öğrencilerin atanan optimizasy
 - Emre Diş
 - Baran Bingöl
 - Ural Altan Bozkurt
+<<<<<<< HEAD
 - Ege Kavak
+=======
+- Kenan Şentürk
+- Mustafa Surhay Samsa
+
+
+>>>>>>> 115190ca3077776fdb5c8d3a5c3247a25bbc42f6
 ## Başarılar!
 
