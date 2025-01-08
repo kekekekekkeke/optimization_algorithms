@@ -1,101 +1,40 @@
-# Dengeden Optimizasyon (EO) Algoritması Dokümantasyonu
+# Equilibrium Optimizer (EO) Algoritması Dokümantasyonu
 
 ## Giriş
+Equilibrium Optimizer (EO), 2020 yılında Faramarzi ve arkadaşları tarafından önerilen, denge kontrol hacmi kavramına dayanan popülasyon tabanlı bir meta-sezgisel optimizasyon algoritmasıdır. Algoritma, parçacıkların denge durumuna ulaşma sürecini taklit eder.
 
-Dengeden Optimizasyon (Equilibrium Optimizer - EO), kontrol hacmi kütle dengesi modelinden esinlenerek geliştirilmiş yenilikçi bir optimizasyon algoritmasıdır. Bu algoritma, denge durumu kavramını kullanarak aday çözümleri iteratif olarak iyileştirir. Bu dökümantasyon, EO algoritmasının matematiksel temellerini, çalışma prensiplerini ve uygulama detaylarını açıklamaktadır.
+## Temel Özellikler
+- **Denge Durumları**: Algoritma 4 farklı denge durumu (ceq1, ceq2, ceq3, ceq4) ve bunların ortalamasını (ceq_ave) kullanır
+- **Dinamik Parametreler**: 
+  - V_max: Maksimum hız (1 olarak sabitlenmiş)
+  - a₁: Keşif parametresi (2 olarak sabitlenmiş) 
+  - a₂: Sömürü parametresi (1 olarak sabitlenmiş)
+  - GP: Global havuz oranı (0.5 olarak sabitlenmiş)
 
-## Matematiksel Formülasyon
+## Konum Güncelleme Denklemleri
+EO algoritmasında parçacıkların konumları şu ana denklemlerle güncellenir:
 
-### 1. Denge Havuzu Oluşumu
-Algoritma, en iyi aday çözümleri içeren bir denge havuzu tutar:
-
-\[
-C_{eq} = \{C_{eq1}, C_{eq2}, C_{eq3}, C_{eq4}, \bar{C}_{eq}\}
-\]
-
-Burada:
-- \( C_{eq1}, C_{eq2}, C_{eq3}, C_{eq4} \): Uygunluk değerine göre en iyi dört aday çözüm.
-- \( \bar{C}_{eq} \): Bu çözümlerin ortalaması:
-
-\[
-\bar{C}_{eq} = \frac{C_{eq1} + C_{eq2} + C_{eq3} + C_{eq4}}{4}
-\]
-
-### 2. Aday Çözümlerin Güncellenmesi
-Her bir aday çözüm \( C_i \) için güncelleme denklemi:
-
-\[
-C_i = C_{eq} + (C_i - C_{eq}) \cdot F + \frac{G}{\lambda V_{max}} (1 - F)
-\]
+$\vec{X} = \vec{X}_{eq} + (\vec{X} - \vec{X}_{eq})F + \frac{\vec{G}}{\lambda V_{max}}(1-F)$
 
 Burada:
-- \( F \): Keşif ve sömürü dengesini kontrol eden üstel terim:
+- $\vec{X}_{eq}$: Seçilen denge durumu
+- $F = a_1 \cdot sign(r-0.5)(e^{-\lambda t}-1)$: Üstel azalma faktörü 
+- $\vec{G} = G_0F$: Üretilen G vektörü
+- $G_0 = GCP(X_{eq} - \lambda\vec{X})$: Başlangıç G vektörü
+- $\lambda$: Rastgele üretilen kontrol parametresi
+- $t = (1-\frac{l}{T})^{a_2\frac{l}{T}}$: Zaman fonksiyonu
 
-\[
-F = a_1 \cdot \text{sign}(r - 0.5) \cdot (e^{-\lambda t} - 1)
-\]
+## Keşif ve Sömürü Mekanizmaları
 
-- \( G \): Aday çözümlerin üretim oranı:
+1. **Keşif (Exploration)**:
+   - Erken iterasyonlarda F değeri büyük olduğundan, parçacıklar geniş arama yapar
+   - a₁ parametresi keşif yeteneğini kontrol eder
+   - F fonksiyonu: $F = a_1 \cdot sign(r-0.5)(e^{-\lambda t}-1)$
 
-\[
-G = G_0 \cdot F \quad \text{burada} \quad G_0 = GCP \cdot (C_{eq} - \lambda C_i)
-\]
+2. **Sömürü (Exploitation)**:
+   - İterasyonlar ilerledikçe t değeri küçülür ve F azalır
+   - a₂ parametresi sömürü dengesini ayarlar
+   - Zaman fonksiyonu: $t = (1-\frac{l}{T})^{a_2\frac{l}{T}}$
 
-- \( \lambda \): Stokastik davranışı kontrol eden rastgele bir vektör.
-- \( V_{max} \): Parçacıkların maksimum hızı.
-
-### 3. Yakınsama Denklemi
-Yakınsama davranışı şu denklemle kontrol edilir:
-
-\[
-t = \left(1 - \frac{l}{L}\right)^{a_2 \cdot \frac{l}{L}}
-\]
-
-Burada \( l \), mevcut iterasyon sayısını, \( L \) ise maksimum iterasyon sayısını ifade eder.
-
-## Çalışma Prensibi
-
-1. **Başlatma**:
-    - Aday çözümler rastgele olarak \([lb, ub]\) sınırları içinde başlatılır.
-    - Her bir adayın uygunluk değeri değerlendirilir.
-
-2. **Denge Havuzunun Güncellenmesi**:
-    - En iyi dört aday çözüm \( C_{eq1}, C_{eq2}, C_{eq3}, C_{eq4} \) belirlenir.
-    - Ortalama denge çözümü \( \bar{C}_{eq} \) hesaplanır.
-
-3. **Aday Güncellemesi**:
-    - Her aday çözüm, yukarıdaki denklemler kullanılarak güncellenir.
-
-4. **Yakınsama Kontrolü**:
-    - Maksimum iterasyon sayısına veya hedef uygunluk değerine ulaşıldığında algoritma sonlandırılır.
-
-5. **Sonuçların Döndürülmesi**:
-    - En iyi çözüm ve yakınsama eğrisi çıktılanır.
-
-## Algoritma Uygulaması
-
-EO algoritması Python dilinde uygulanmıştır. Uygulamanın temel yapısı aşağıdaki gibidir:
-
-- **`EO` Fonksiyonu**:
-  - Girdi: Amaç fonksiyonu `objf`, alt sınırlar `lb`, üst sınırlar `ub`, boyut `dim`, popülasyon boyutu `PopSize`, iterasyon sayısı `iters`.
-  - Çıktı: En iyi çözüm, yakınsama eğrisi, çalışma süresi.
-
-- **Temel Parametreler**:
-  - \( a_1 = 2 \), \( a_2 = 1 \): Keşif ve sömürü dengesini kontrol eden sabitler.
-  - \( GP = 0.5 \): Üretim olasılığı.
-  - \( V_{max} = 1 \): Maksimum hız.
-
-# EO Çalıştırma
-best_solution = EO(sphere, lb, ub, dim, PopSize, iters)
-print("En İyi Çözüm:", best_solution)
-```
-
-## Kaynaklar
-
-1. Faramarzi, A., Heidarinejad, M., Stephens, B., & Mirjalili, S. (2020). "Equilibrium optimizer: A novel optimization algorithm." *Knowledge-Based Systems*, 191, 105190. DOI: [10.1016/j.knosys.2019.105190](https://doi.org/10.1016/j.knosys.2019.105190).
-2. Algoritmanın MATLAB uygulaması, Afshin Faramarzi tarafından makalede sunulmuştur.
-
----
-
-Bu dokümantasyon, Dengeden Optimizasyon algoritmasını, matematiksel temelini ve pratik kullanımını kapsamlı bir şekilde açıklamaktadır. Daha fazla ayrıntı için yukarıda belirtilen kaynaklara başvurabilirsiniz.
-
+## Referanslar
+1. Faramarzi, A., Heidarinejad, M., Stephens, B., & Mirjalili, S. (2020). Equilibrium optimizer: A novel optimization algorithm. Knowledge-Based Systems, 191, 105190. DOI: 10.1016/j.knosys.2019.105190
