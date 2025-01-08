@@ -136,6 +136,6 @@ Bu depo, Optimizasyona Giriş dersi kapsamında öğrencilerin atanan optimizasy
 - Emre Diş
 - Baran Bingöl
 - Ural Altan Bozkurt
-
+- Ege Kavak
 ## Başarılar!
 
