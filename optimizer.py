@@ -24,7 +24,7 @@ import optimizers.APO as apo
 import optimizers.MGO.MGO as mgo
 import optimizers.ChOA.ChOA as choa
 import optimizers.COA as coa
-
+import optimizers.EO as eo
 
 import benchmarks
 import csv
@@ -82,6 +82,8 @@ def selector(algo, func_details, popSize, Iter):
         x = choa.ChOA(getattr(benchmarks, function_name), lb, ub, dim, popSize, Iter)
     elif algo == "COA":
         x = coa.COA(getattr(benchmarks, function_name), lb, ub, dim, popSize, Iter)
+    elif algo == "EO":
+        x = eo.EO(getattr(benchmarks, function_name), lb, ub, dim, popSize, Iter)    
     else:
         return None # burdaki typo'yu düzelttim. null yazıyordu Python için "None" olması gerekiyor.
     return x

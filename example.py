@@ -8,7 +8,7 @@ Created on Tue May 17 15:50:25 2016
 from optimizer import run
 
 # Select optimizers
-# "SSA","PSO","GA","BAT","FFA","GWO","WOA","MVO","MFO","CS","HHO","SCA","JAYA","DE","MGO","ChOA"
+# "SSA","PSO","GA","BAT","FFA","GWO","WOA","MVO","MFO","CS","HHO","SCA","JAYA","DE","MGO","EO","COA","ChOA"
 #optimizer = ["SSA", "PSO", "GWO"]
 
 optimizer = ["COA"]
