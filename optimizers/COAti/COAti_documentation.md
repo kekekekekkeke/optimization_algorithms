@@ -81,7 +81,7 @@ if new_fitness < fitness[i]:
    - Başlık: "Coati Optimization Algorithm: A New Bio-Inspired Metaheuristic Algorithm for Solving Optimization Problems"
    - Yazarlar: Mohammad Dehghani, Zeinab Montazeri, Pavel Trojovský
    - Dergi: Knowledge-Based Systems, 2021.
-   - (https://www.sciencedirect.com/science/article/pii/S09507051210106926)
+   - (https://www.sciencedirect.com/science/article/pii/S0950705122011042)
 
 2. **Ek Kaynaklar**:
    - Dhiman G., SSC: "Mühendislik Uygulamaları için Hibrit Doğa İlhamlı Meta-Sezgisel Optimizasyon Algoritması". Knowledge-Based Systems, 2021.
