@@ -25,7 +25,7 @@ import optimizers.MGO.MGO as mgo
 import optimizers.ChOA.ChOA as choa
 import optimizers.COA as coa
 import optimizers.EO as eo
-import optimizers.MPA as mp
+import optimizers.MPA as mpa
 
 import benchmarks
 import csv
