@@ -22,10 +22,10 @@ import optimizers.DE as de
 import optimizers.AAA as aaa
 import optimizers.APO as apo
 import optimizers.MGO.MGO as mgo
-
+import optimizers.COAti.COAti as coati
 import benchmarks
 import csv
-import numpy
+import numpy as np
 import time
 import warnings
 import os
@@ -75,6 +75,8 @@ def selector(algo, func_details, popSize, Iter):
         x = apo.APO(getattr(benchmarks, function_name), lb, ub, dim, popSize, Iter)
     elif algo == "MGO":
         x = mgo.MGO(getattr(benchmarks, function_name), lb, ub, dim, popSize, Iter)
+    elif algo == "COAti":
+        x = coati.COAti(getattr(benchmarks, function_name), lb, ub, dim, popSize, Iter)
     else:
         return None # burdaki typo'yu düzelttim. null yazıyordu Python için "None" olması gerekiyor.
     return x
@@ -148,13 +150,13 @@ def run(optimizer, objectivefunc, NumOfRuns, params, export_flags):
                         if (
                             Flag_details == False
                         ):  # just one time to write the header of the CSV file
-                            header = numpy.concatenate(
+                            header = np.concatenate(
                                 [["Optimizer", "objfname", "ExecutionTime"], CnvgHeader]
                             )
                             writer.writerow(header)
                             Flag_details = True  # at least one experiment
                         executionTime[k] = x.executionTime
-                        a = numpy.concatenate(
+                        a = np.concatenate(
                             [[x.optimizer, x.objfname, x.executionTime], x.convergence]
                         )
                         writer.writerow(a)
@@ -168,16 +170,16 @@ def run(optimizer, objectivefunc, NumOfRuns, params, export_flags):
                     if (
                         Flag == False
                     ):  # just one time to write the header of the CSV file
-                        header = numpy.concatenate(
+                        header = np.concatenate(
                             [["Optimizer", "objfname", "ExecutionTime"], CnvgHeader]
                         )
                         writer.writerow(header)
                         Flag = True
 
                     avgExecutionTime = float("%0.2f" % (sum(executionTime) / NumOfRuns))
-                    avgConvergence = numpy.mean(convergence, axis=0, dtype=numpy.float64).tolist()
-                    #avgConvergence = numpy.around(numpy.mean(convergence, axis=0, dtype=numpy.float64), decimals=2).tolist()
-                    a = numpy.concatenate(
+                    avgConvergence = np.mean(convergence, axis=0, dtype=np.float64).tolist()
+                    #avgConvergence = np.around(np.mean(convergence, axis=0, dtype=np.float64), decimals=2).tolist()
+                    a = np.concatenate(
                         [[optimizerName, objfname, avgExecutionTime], avgConvergence]
                     )
                     writer.writerow(a)
