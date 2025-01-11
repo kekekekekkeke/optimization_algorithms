@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 """
-Created on Tue May 17 15:50:25 2016
+Created on Saturday, January 4 11.25 2025
 
-@author: hossam
+@author: Ege Çıtak
 """
 from pathlib import Path
 import optimizers.PSO as pso
@@ -20,9 +20,15 @@ import optimizers.SCA as sca
 import optimizers.JAYA as jaya
 import optimizers.DE as de
 import optimizers.AAA as aaa
+import optimizers.FDA as FDA
 import optimizers.APO as apo
 import optimizers.MGO.MGO as mgo
 import optimizers.COAti.COAti as coati
+import optimizers.ChOA.ChOA as choa
+import optimizers.COA as coa
+import optimizers.EO as eo
+import optimizers.MPA as mpa
+
 import benchmarks
 import csv
 import numpy as np
@@ -71,12 +77,22 @@ def selector(algo, func_details, popSize, Iter):
         x = de.DE(getattr(benchmarks, function_name), lb, ub, dim, popSize, Iter)
     elif algo == "AAA":
         x = aaa.AAA(getattr(benchmarks, function_name), lb, ub, dim, popSize, Iter)
+    elif algo == "FDA":
+        x = FDA.FDA(getattr(benchmarks, function_name), lb, ub, dim, popSize, Iter)
     elif algo == "APO":
         x = apo.APO(getattr(benchmarks, function_name), lb, ub, dim, popSize, Iter)
     elif algo == "MGO":
         x = mgo.MGO(getattr(benchmarks, function_name), lb, ub, dim, popSize, Iter)
     elif algo == "COAti":
         x = coati.COAti(getattr(benchmarks, function_name), lb, ub, dim, popSize, Iter)
+    elif algo == "ChOA":
+        x = choa.ChOA(getattr(benchmarks, function_name), lb, ub, dim, popSize, Iter)
+    elif algo == "COA":
+        x = coa.COA(getattr(benchmarks, function_name), lb, ub, dim, popSize, Iter)
+    elif algo == "EO":
+        x = eo.EO(getattr(benchmarks, function_name), lb, ub, dim, popSize, Iter) 
+    elif algo == "MPA":
+        x = mpa.MPA(getattr(benchmarks, function_name), lb, ub, dim, popSize, Iter)    
     else:
         return None # burdaki typo'yu düzelttim. null yazıyordu Python için "None" olması gerekiyor.
     return x
@@ -124,7 +140,7 @@ def run(optimizer, objectivefunc, NumOfRuns, params, export_flags):
     Flag = False
     Flag_details = False
 
-    # CSV Header for for the cinvergence
+    # CSV Header for for the convergence
     CnvgHeader = []
 
     results_directory = time.strftime("%Y-%m-%d-%H-%M-%S") + "/"
@@ -197,3 +213,6 @@ def run(optimizer, objectivefunc, NumOfRuns, params, export_flags):
         )
 
     print("Execution completed")
+
+
+
