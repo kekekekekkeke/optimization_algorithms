@@ -139,6 +139,7 @@ Bu depo, Optimizasyona Giriş dersi kapsamında öğrencilerin atanan optimizasy
 - Kenan Şentürk
 - Mustafa Surhay Samsa
 - Ege Kavak
+- Bilge Göksel
 
 ## Başarılar!
 
